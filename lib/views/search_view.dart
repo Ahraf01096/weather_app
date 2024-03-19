@@ -9,8 +9,8 @@ class SearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WeatherModel weatherModel =
-    BlocProvider.of<GetWeatherCubit>(context).weatherModel!;
+    WeatherModel? weatherModel =
+        BlocProvider.of<GetWeatherCubit>(context).weatherModel;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search city'),
@@ -20,18 +20,19 @@ class SearchView extends StatelessWidget {
             gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
-                colors: [
+                colors: weatherModel == null
+                    ? [Colors.blueGrey, Colors.white]
+            :[
                   getThemeColor(weatherModel.condition)[200]!,
                   getThemeColor(weatherModel.condition)[50]!,
-                ]
-            )),
+                ])),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextFormField(
-              onFieldSubmitted: (value)  {
-              var getWeatherCubit =  BlocProvider.of<GetWeatherCubit>(context);
-              getWeatherCubit.getWeather(cityName: value);
+              onFieldSubmitted: (value) {
+                var getWeatherCubit = BlocProvider.of<GetWeatherCubit>(context);
+                getWeatherCubit.getWeather(cityName: value);
                 Navigator.pop(context);
               },
               decoration: InputDecoration(
